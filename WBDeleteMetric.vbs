@@ -1,10 +1,10 @@
 Option Explicit
 
+' Jason Rametta
+
 Private Sub Worksheet_Activate()
 
     On Error Resume Next
-
-    Const FIRST_ROW_SETTINGS = 8
 
     Dim settings        As Worksheet
     Dim i               As Byte

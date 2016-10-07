@@ -1,5 +1,7 @@
 Option Explicit
 
+' Jason Rametta
+
 ' PRIVATES
 Private mName            As String
 Private mSampleSize      As String

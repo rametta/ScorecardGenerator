@@ -1,5 +1,7 @@
 Option Explicit
 
+' Jason Rametta
+
 ' Worksheet Names
 Public Const SCORECARD_NAME         As String = "Scorecard"
 Public Const COLORS_NAME            As String = "Color Coding"
@@ -12,7 +14,7 @@ Public Const DATA_NAME              As String = "Data"
 
 Public Const FIRST_ROW_SCORECARD    As Byte = 5
 Public Const FIRST_ROW_DASHBOARD    As Byte = 1
-Public Const FIRST_ROW_SETTINGS     As Byte = 8
+Public Const FIRST_ROW_SETTINGS     As Byte = 7
 
 Public Const FIRST_COL_SCORECARD    As String = "A"
 Public Const LAST_COL_SCORECARD     As String = "U"

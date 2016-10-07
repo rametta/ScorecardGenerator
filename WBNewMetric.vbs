@@ -1,3 +1,7 @@
+Option Explicit
+
+' Jason Rametta
+
 'Validates data everytime a cell value changes
 Private Sub Worksheet_Change(ByVal Target As Range)
     If Target.Address <> "$B$3" Then Exit Sub

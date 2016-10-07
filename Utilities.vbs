@@ -1,5 +1,7 @@
 Option Explicit
 
+' Jason Rametta
+
 Public Sub formatRow(rng As Range, isColorMatrix As Boolean)
     With rng
         .Borders.LineStyle = xlContinuous
@@ -50,6 +52,7 @@ End Function
 Public Function percentFormat(cellStr As String, decimalPlaces As Byte) As String
     Dim i As Byte
     Dim result As String
+    
     result = IIf(decimalPlaces > 0, "text(" & cellStr & ",""0.", "text(" & cellStr & ",""0")
     For i = 1 To decimalPlaces
         result = result & "0"
@@ -90,7 +93,7 @@ Public Sub StartUp(Optional except As String)
 
     ' Executes if it's on startup, not on tab changes
     If except = "" Then
-        settings.Range("isAutoHide") = "On"
+        settings.Range("isAutoHide") = True
         Application.Goto scorecard.Range("C2")
     End If
 

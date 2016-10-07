@@ -1,5 +1,7 @@
 Option Explicit
 
+' Jason Rametta
+
 Public Sub RemoveMetric()
     FastProcessing
 

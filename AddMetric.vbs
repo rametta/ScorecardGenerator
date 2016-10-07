@@ -1,5 +1,7 @@
 Option Explicit
 
+' Jason Rametta
+
 ' Event handler when Add New Metric is clicked
 Public Sub AddMetric()
     FastProcessing
@@ -134,20 +136,31 @@ Public Sub AddMetric()
             .Columns(TemplateColumns.yellow).Formula = "=""" & Metric.colors(Legend.YellowDisplay) & " "" & " & IIf(Metric.isPercentage, percentFormat("AQ" & r, Metric.DecimalsDisplay), "AQ" & r) & " & "" - " & Metric.colors(Legend.YelhighDisplay) & " "" & " & IIf(Metric.isPercentage, percentFormat("AR" & r, Metric.DecimalsDisplay), "AR" & r) & " "
             .Columns(TemplateColumns.green).Formula = "=""" & Metric.colors(Legend.GreenDisplay) & " "" & " & IIf(Metric.isPercentage, percentFormat("AS" & r, Metric.DecimalsDisplay), "AS" & r) & ""
 
+            'fill in color coding formulas
+            .Columns(Letter(TemplateColorColumns.jan) & ":" & Letter(TemplateColorColumns.dec)).Formula = _
+            "=IF(AND(isColorCoding,Settings!T2),IF(C2" & Metric.colors(Legend.RealRedDisplay) & "$AP$2,""r"",IF(AND(C2" & Metric.colors(Legend.RealYellowDisplay) & "$AQ$2,C2" & Metric.colors(Legend.RealYelhighDisplay) & "$AR$2),""y"",IF(C2" & Metric.colors(Legend.RealGreenDisplay) & "$AS$2,""g""))),""w"")"   'jan-dec
+
+            .Columns(TemplateColorColumns.PrevYearRestated).Formula = _
+            "=IF(isColorCoding,IF(B2" & Metric.colors(Legend.RealRedDisplay) & "$AP$2,""r"",IF(AND(B2" & Metric.colors(Legend.RealYellowDisplay) & "$AQ$2,B2" & Metric.colors(Legend.RealYelhighDisplay) & "$AR$2),""y"",IF(B2" & Metric.colors(Legend.RealGreenDisplay) & "$AS$2,""g""))),""lgrey"")"                'pYear
+
+            .Columns(TemplateColorColumns.ytd).Formula = _
+            "=IF(isColorCoding,IF(O2" & Metric.colors(Legend.RealRedDisplay) & "$AP$2,""r"",IF(AND(O2" & Metric.colors(Legend.RealYellowDisplay) & "$AQ$2,B2" & Metric.colors(Legend.RealYelhighDisplay) & "$AR$2),""y"",IF(O2" & Metric.colors(Legend.RealGreenDisplay) & "$AS$2,""g""))),""lgrey"")"                'ytd
+
+
             'add submetrics to dashboard
             For i = Metric.SubMetrics.Count To 1 Step -1
                 .Columns(Letter(TemplateColumns.SubMetrics) & ":" & Letter(TemplateColumns.Target)).Insert shift:=xlDown                                                                                            'insert new row
                 .Columns(TemplateColumns.SubMetrics) = Metric.SubMetrics.Value2(i, 1)                                                                                                                               'add submetric name
                 .Columns(TemplateColumns.PrevYearRestated).Formula = "=sumifs(actual,metric,$A$1,submetric,$A" & r & ",year,pyear)"                                                                                 'pYear
                 .Columns(TemplateColumns.Target).Formula = "=sumifs(target,metric,$A$1,submetric,$A" & r & ",year,cyear)"                                                                                           'target
-                .Columns(Letter(TemplateColumns.jan) & ":" & Letter(TemplateColumns.dec)).Formula = "=if(Settings!T$2=TRUE,sumifs(actual,metric,$A$1,submetric,$A" & r & ",month,C$" & r - 1 & ",year,cyear),"""")" 'jan-dec
+                .Columns(Letter(TemplateColumns.jan) & ":" & Letter(TemplateColumns.dec)).Formula = "=if(Settings!T$2,sumifs(actual,metric,$A$1,submetric,$A" & r & ",month,C$" & r - 1 & ",year,cyear),"""")"      'jan-dec
                 .Columns(TemplateColumns.ytd).Formula = "=sum(C" & r & ":N" & r & ")"                                                                                                                               'YTD
             Next
         End With
 
         'add formulas to newly added submetrics and totals on dashboard
         With .Rows(Metric.SubMetrics.Count + r)
-            .Columns(Letter(TemplateColumns.jan) & ":" & Letter(TemplateColumns.dec)).Formula = "=if(Settings!T$2=TRUE,sum(C" & r & ":C" & Metric.SubMetrics.Count + r - 1 & "),"""")" 'total months
+            .Columns(Letter(TemplateColumns.jan) & ":" & Letter(TemplateColumns.dec)).Formula = "=if(Settings!T$2,sum(C" & r & ":C" & Metric.SubMetrics.Count + r - 1 & "),"""")"      'total months
             .Columns(TemplateColumns.PrevYearRestated).Formula = "=sum(B" & r & ":B" & Metric.SubMetrics.Count + r - 1 & ")"                                                           'total previous year restated
             .Columns(Letter(TemplateColumns.ytd) & ":" & Letter(TemplateColumns.Target)).Formula = "=sum(O" & r & ":O" & Metric.SubMetrics.Count + r - 1 & ")"                         'total ytd and target
             .Columns(Letter(TemplateColumns.SubMetrics) & ":" & Letter(TemplateColumns.Target)).Copy                                                                                   'copy formating
